@@ -53,8 +53,6 @@ const Board = () => {
 
   const reorderCard = useCallback(
     ({ columnId, startIndex, finishIndex }: { columnId: string; startIndex: number; finishIndex: number }) => {
-      console.log(startIndex);
-      console.log(finishIndex);
       if (startIndex === finishIndex) {
         return;
       }
@@ -92,13 +90,14 @@ const Board = () => {
 
       const sourceColumnData = columnsData[sourceColumnId];
       const draggedCardIndex = sourceColumnData.cards.findIndex((card: CardData) => card.id === draggedCardId);
-      const [destinationColumnRecord] = location.current.dropTargets;
 
-              const closestEdgeOfTarget = extractClosestEdge(destinationColumnRecord.data);
-        console.log(closestEdgeOfTarget);
 
       if (location.current.dropTargets.length === 1) {
+        const [destinationColumnRecord] = location.current.dropTargets;
         const destinationColumnId = (destinationColumnRecord.data as ColumnData).columnId;
+        const closestEdgeOfTarget = extractClosestEdge(destinationColumnRecord.data);
+        console.log("closest edge", closestEdgeOfTarget);
+        console.log(destinationColumnRecord);
         if (sourceColumnId === destinationColumnId) {
           const destinationIndex = getReorderDestinationIndex({
             startIndex: draggedCardIndex,
@@ -106,7 +105,8 @@ const Board = () => {
             closestEdgeOfTarget: null,
             axis: "vertical"
           });
-
+          const closestEdgeOfTarget = extractClosestEdge(destinationColumnRecord.data);
+          console.log("closest edge", closestEdgeOfTarget);
           reorderCard({
             columnId: sourceColumnData.columnId,
             startIndex: draggedCardIndex,
@@ -114,6 +114,7 @@ const Board = () => {
           });
           return;
         }
+
         moveCard({
           movedCardIndexInSourceColumn: draggedCardIndex,
           sourceColumnId,
