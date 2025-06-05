@@ -1,16 +1,15 @@
-export type CardData = {
-    id: number;
-    type?: string;
-    content: string;
-    columnId?: string;
-};
+import type { ReactElement } from "react";
+import type { CardData } from "./shared/workspace";
 
-export type ColumnData = {
-    columnId: string;
-    title: string;
-    cards: Array<CardData>;
-};
 
 export type BoardData = {
     [key: string]: ColumnData;
+};
+
+export type Edge = "top" | "right" | "bottom" | "left";
+
+
+interface CardBase {
+    preview: boolean;
+    cardData: CardData;
 };

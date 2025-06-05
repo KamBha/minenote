@@ -1,15 +1,17 @@
-import './App.css';
-import Board from './Board';
+import Board from './board/Board';
 import Header from './Header';
-import "./App.css";
+import store from "./board/workspace/workspaceStore.ts";
+import { Provider } from 'react-redux';
 
 function App() {
 
   return (
-    <div className="app">
-      <Header />
-      <Board />
-    </div>
+    <Provider store={store}>
+      <div className="app">
+        <Header />
+        <Board />
+      </div>
+    </Provider>
   );
 }
 
