@@ -18,9 +18,9 @@ export default defineWorkspace([
           { browser: 'chromium' },
           { browser: 'firefox' },
           // { browser: 'webkit' },
-        ],
+        ]
       },
-
+      setupFiles: ["./src/testHelpers/setupBrowser.ts"]
     },
   },
 

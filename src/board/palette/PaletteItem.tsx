@@ -1,24 +1,26 @@
 import { draggable } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import React, { useEffect, useRef, useState } from "react";
 import invariant from "tiny-invariant";
-import { setCustomNativeDragPreview } from '@atlaskit/pragmatic-drag-and-drop/element/set-custom-native-drag-preview';
-import BaseCard from "../../cards/BaseCard";
-import Note from "../../cards/implementations/Note";
+import { Provider } from "react-redux";
 import { createRoot } from "react-dom/client";
+import { setCustomNativeDragPreview } from '@atlaskit/pragmatic-drag-and-drop/element/set-custom-native-drag-preview';
+import CardContainer from "../cards/CardContainer";
 import store, { useAppSelector } from "../workspace/workspaceStore";
 import { PREVIEW_OFFSET_X, PREVIEW_OFFSET_Y } from "../../constants";
-import { Provider } from "react-redux";
+import { CardStatus, type CardBase, type DragCardData } from "../../global";
+import { type CardType } from "../../shared/workspaceTypes";
 
 
 interface PaletteItemProps {
     Icon: React.FC<React.SVGProps<SVGSVGElement>>;
+    Component: React.FC<CardBase>;
     label: string;
-    type?: string;
+    type: CardType;
     defaultHeight: number;
     defaultWidth: number;
 }
 
-const PaletteItem: React.FC<PaletteItemProps> = ({ Icon, label, type, defaultHeight:height, defaultWidth:width }) => {
+const PaletteItem: React.FC<PaletteItemProps> = ({ Icon, Component, label, type, defaultHeight:height, defaultWidth:width }) => {
     const itemRef = useRef<HTMLDivElement>(null);
     const [isDragging, setIsDragging] = useState(false);
     const zIndex = useAppSelector((state) => {
@@ -30,9 +32,9 @@ const PaletteItem: React.FC<PaletteItemProps> = ({ Icon, label, type, defaultHei
         invariant(itemElement, "Item element is not defined");
         return draggable({
             element: itemElement,
-            getInitialData: () => ({
-                status: "NEW",
-                type: type,
+            getInitialData: (): DragCardData => ({
+                status: CardStatus.NEW,
+                type,
                 width,
                 height
             }),
@@ -47,7 +49,7 @@ const PaletteItem: React.FC<PaletteItemProps> = ({ Icon, label, type, defaultHei
                     getOffset: () => ({ x: PREVIEW_OFFSET_X, y: PREVIEW_OFFSET_Y }),
                     render({ container }) {
                         const root = createRoot(container);
-                        root.render(<Provider store={store}><BaseCard preview={true} Component={Note} cardData={{id: "foo", type: "note", height, width, zIndex }}></BaseCard></Provider>);
+                        root.render(<Provider store={store}><CardContainer preview={true} Component={Component} cardData={{id: "foo", type: "note", height, width, zIndex }}></CardContainer></Provider>);
                         return () => {
                             root.unmount();
                         };

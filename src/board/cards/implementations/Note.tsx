@@ -1,14 +1,13 @@
-import React from "react";
-import type { CardBase } from "../../global";
+import type { CardBase } from "../../../global";
 
 interface NoteProps  extends  CardBase {
     
 }
 
-const Note = ({ preview } : NoteProps) => {
+const Note = ({ preview, cardData } : NoteProps) => {
     return (
         <div className={`note-card ${preview ? "preview" : ""}`}>
-            <p>This is a Note card.</p>
+            <p>This is a Note card. !{cardData.id}!</p>
         </div>
     );
 };

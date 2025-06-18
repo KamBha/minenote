@@ -1,4 +1,4 @@
-import type { Edge } from "./global";
+import type { Edge } from "../../global";
 
 const DropIndicator = ({ edge, gap }: 
     { edge: Edge | null, gap: string }

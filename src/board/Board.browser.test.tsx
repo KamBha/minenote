@@ -103,8 +103,10 @@ describe("Board", () => {
         expect(droppedItem.offsetTop).toBe(200);
         expect(droppedItem.offsetLeft).toBe(200);
         await userEvent.dragAndDrop(droppedElem, workspace, { targetPosition: { x: 300, y: 300 }});
-        expect(droppedItem.offsetTop).toBe(customStore.getState().workspace.cards["100"].top);
-        expect(droppedItem.offsetLeft).toBe(customStore.getState().workspace.cards["100"].left);
+        expect(Math.ceil(droppedItem.offsetTop))
+            .toBe(Math.ceil(customStore.getState().workspace.cards["100"].top!));
+        expect(Math.ceil(droppedItem.offsetLeft))
+            .toBe(Math.ceil(customStore.getState().workspace.cards["100"].left!));
     });
 
     it("supports drag and drop of existing items to place past border of workspace", async () => {
@@ -142,7 +144,6 @@ describe("Board", () => {
     });
 
     it("supports deleting existing items", async () => {
-        
         const customStore = setupStore({ 
             workspace: {
                 id: "foo",

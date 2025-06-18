@@ -1,7 +1,6 @@
 
 
 * {
-  box-sizing: border-box;
   padding: 0;
   margin: 0;
 }
@@ -33,6 +32,7 @@ body {
 #root {
   width: 100%;
   row-gap: 0px;
+  gap: 0px;
 }
 
 main {
@@ -85,11 +85,13 @@ main {
   flex-wrap: nowrap;
   padding-top: 1rem;
   flex-grow: 1;
+
 }
 
 .palette-item {
   margin-left: auto;
   margin-right: auto;
+  margin-bottom: 1rem;
   height: fit-content;
   line-height: 1rem;
   width:2.1rem;
@@ -115,6 +117,16 @@ main {
   margin-top: 0.1rem;
 
   fill: var(--clr-light-a0);
+  height: 1.2rem;
+  width: 1.4rem;
+}
+
+
+.palette-item-content.column-palette-item svg {
+  margin-left: 0.2rem;
+  margin-right: 0.2rem;
+  margin-top: 0.3rem;
+
   height: 1.2rem;
   width: 1.4rem;
 }
@@ -148,18 +160,48 @@ main {
 }
 
 .base-card {
+    box-sizing: border-box;
     position:absolute;
     resize:both;
+    overflow: hidden;
     background-color: var(--clr-surface-a20);
     padding: 1rem;
-    overflow: scroll;
     border: 1px solid var(--clr-surface-a30);
+    height: fit-content;
+}
+
+.base-card.has-parent {
+  position:relative;
+}
+
+.column {
+  resize: horizontal;
+  min-width: 320px;
+}
+
+.child-cards {
+  width: 100%;
+  position: static;
+  display:flex;
+  flex-direction: column;
+  position: relative;
+  height: auto;
+  min-height: min-content;
+}
+
+.is-child { 
+  resize: none;
+  overflow-y: auto;
+}
+
+.column .child-cards .base-card {
+  width: 100%;
+  height: 100%;
 }
 
 .base-card.dragging {
     display: none;
 }
-
 
 .edge-top {
   top: calc(-0.65 * (var(--gap, 0px) + 2px));

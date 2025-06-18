@@ -4,6 +4,7 @@ import Trash from "../../assets/trash.svg?react";
 import { useAppDispatch } from "../workspace/workspaceStore";
 import invariant from "tiny-invariant";
 import { deleteCard } from "../workspace/workspaceSlice";
+import { CardStatus } from "../../global";
 
 const TrashContainer = () => {
     const trashRef = useRef<HTMLDivElement>(null);
@@ -15,7 +16,7 @@ const TrashContainer = () => {
         return dropTargetForElements({
             element: trashElement as Element,
             onDrop: ({ source }) => {
-                if (source.data.status === "EXISTING") {
+                if (source.data.status === CardStatus.EXISTING) {
                     dispatch(deleteCard({ id: (source.data.id as string) }));
                 }
             }
