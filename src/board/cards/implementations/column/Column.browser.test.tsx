@@ -1,10 +1,10 @@
 import { render } from "vitest-browser-react";
 import { Provider } from "react-redux";
-import Board from "../../Board";
-import { setupStore } from "../../workspace/workspaceStore";
+import Board from "../../../Board";
+import { setupStore } from "../../../workspace/workspaceStore";
 import { describe, it, expect, beforeEach } from "vitest";
 import { page, userEvent, type Locator } from '@vitest/browser/context';
-import type { HasChildrenIds, ID } from "../../../shared/workspaceTypes";
+import type { HasChildrenIds, ID } from "../../../../shared/workspaceTypes";
 
 
 describe("Column", () => {
@@ -179,7 +179,7 @@ describe("Column", () => {
                 column = workspace.getByTestId("card-column")
             });
             it("to top of column", async () => {
-                await userEvent.dragAndDrop(page.elementLocator(notePalette), column, { targetPosition: { x: 0, y: 0 } });
+                await userEvent.dragAndDrop(page.elementLocator(notePalette), column, { targetPosition: { x: 1, y: 1 } });
 
                 const childCards = column.getChildCards();
                 const childrenOfColumnAfterChange = (customStore.getState().workspace.cards["column"].content as HasChildrenIds).children;

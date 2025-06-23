@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { CardBase, Edge } from "../../../global";
+import type { CardBase, Edge } from "../../../../global";
 import invariant from "tiny-invariant";
 import { dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import { attachClosestEdge, extractClosestEdge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge';
-import type { ColumnContent, ID } from "../../../shared/workspaceTypes";
-import { useAppSelector } from "../../workspace/workspaceStore";
-import retrieveCardTypeDetails from "../cardRegistry";
-import CardContainer from "../CardContainer";
+import type { ColumnContent, ID } from "../../../../shared/workspaceTypes";
+import { useAppSelector } from "../../../workspace/workspaceStore";
+import retrieveCardTypeDetails from "../../cardRegistry";
+import CardContainer from "../../CardContainer";
 
 interface ColumnProps extends CardBase {
     content?: ColumnContent
@@ -25,6 +25,10 @@ const Column = ({ preview, cardData }: ColumnProps) => {
         }
         return null;
     }, [columnEdgeDragLocation]);
+
+    const onHeadingClick = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
+        console.log("heading clicked", event);
+    }, []);
     useEffect(() => {
         const columnElement = columnRef.current;
         invariant(columnElement, "Column element is not defined");
@@ -87,7 +91,7 @@ const Column = ({ preview, cardData }: ColumnProps) => {
 
     return (
         <div className={`column-card ${preview ? " preview" : ""}  ${isDraggedOver ? "dragged-over" : ""}`} ref={columnRef}>
-            <h2>{cardDataColumn ? cardDataColumn.title : "New Column"}</h2>
+            <h2 onClick={onHeadingClick}>{cardDataColumn ? cardDataColumn.title : "New Column"}</h2>
             <div>
                 {renderChildCards(cardDataColumn, cards)}
             </div>

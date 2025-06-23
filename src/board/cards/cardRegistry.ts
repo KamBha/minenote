@@ -1,5 +1,5 @@
-import Note from "./implementations/Note";
-import Column from "./implementations/Column";
+import Note from "./implementations/note/Note";
+import Column from "./implementations/column/Column";
 import { default as NoteIcon }  from "../../assets/notes.svg?react";
 import { default as ColumnIcon }  from "../../assets/column.svg?react";
 import type React from "react";

@@ -1,0 +1,25 @@
+.card-container {
+    box-sizing: border-box;
+    position: absolute;
+    resize: both;
+    overflow: hidden;
+    background-color: var(--clr-surface-a20);
+    padding: 1rem;
+    border: 1px solid var(--clr-surface-a30);
+    height: fit-content;
+}
+
+.card-container.has-parent {
+    position: relative;
+}
+
+.card-container.dragging {
+    display: none;
+}
+
+.card-container.selected {
+    outline: 2px solid var(--clr-surface-a50);
+    /* Add more selected styles if needed */
+}
+
+

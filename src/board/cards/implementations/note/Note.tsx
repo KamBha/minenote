@@ -1,4 +1,4 @@
-import type { CardBase } from "../../../global";
+import type { CardBase } from "../../../../global";
 
 interface NoteProps  extends  CardBase {
     

@@ -2,7 +2,7 @@ import { locators } from '@vitest/browser/context'
 
 locators.extend({
   getChildCards() {
-    return ".base-card";
+    return ".card-container";
   }
 })
 

@@ -19,8 +19,7 @@ describe("Workspace", () => {
             </Provider>
         );
 
-        // There should be no elements with the class 'base-card'
-        expect(container.querySelectorAll(".base-card").length).toBe(0);
+        expect(container.querySelectorAll(".card-container").length).toBe(0);
     });
 
     it("renders card when specifies", () => {
@@ -44,8 +43,7 @@ describe("Workspace", () => {
             </Provider>
         );
 
-        // There should be no elements with the class 'base-card'
-        expect(container.querySelectorAll(".base-card").length).toBe(1);
+        expect(container.querySelectorAll(".card-container").length).toBe(1);
         const notes = container.querySelectorAll(".note");
         expect(notes.length).toBe(1);
         // @ts-ignore

@@ -42,7 +42,7 @@ describe("Board", () => {
         const notePalette = container.querySelector(".note-palette-item") as Element;
         const elem = page.elementLocator(notePalette);
         await userEvent.dragAndDrop(elem, workspace, { targetPosition: { x: 100, y: 100 }});
-        const droppedItem = container.querySelector(".base-card") as Element;
+        const droppedItem = container.querySelector(".card-container") as Element;
         const styles = getComputedStyle(droppedItem);
         expect(styles.width).toBe("240px");
         expect(styles.height).toBe("144px");
@@ -65,7 +65,7 @@ describe("Board", () => {
         const notePalette = container.querySelector(".note-palette-item") as Element;
         const elem = page.elementLocator(notePalette);
         await userEvent.dragAndDrop(elem, workspace, { targetPosition: { x: 10, y: 1 }});
-        const droppedItem = container.querySelector(".base-card") as Element;
+        const droppedItem = container.querySelector(".card-container") as Element;
         const styles = getComputedStyle(droppedItem);
         expect(styles.left).toBe("0px");
         expect(styles.top).toBe("0px");
@@ -98,7 +98,7 @@ describe("Board", () => {
         );
 
         const workspace = page.getByTestId("workspace");
-        const droppedItem = container.querySelector(".base-card") as HTMLDivElement;
+        const droppedItem = container.querySelector(".card-container") as HTMLDivElement;
         const droppedElem = page.elementLocator(droppedItem);
         expect(droppedItem.offsetTop).toBe(200);
         expect(droppedItem.offsetLeft).toBe(200);
@@ -136,7 +136,7 @@ describe("Board", () => {
         );
 
         const workspace = page.getByTestId("workspace");
-        const droppedItem = container.querySelector(".base-card") as HTMLDivElement;
+        const droppedItem = container.querySelector(".card-container") as HTMLDivElement;
         const droppedElem = page.elementLocator(droppedItem);
         await userEvent.dragAndDrop(droppedElem, workspace, { targetPosition: { x: 100, y: 1 }});
         expect(droppedItem.offsetTop).toBe(0);
@@ -169,7 +169,7 @@ describe("Board", () => {
         );
 
         const trash = page.getByTestId("trash");
-        const droppedItem = container.querySelector(".base-card") as HTMLDivElement;
+        const droppedItem = container.querySelector(".card-container") as HTMLDivElement;
         const droppedElem = page.elementLocator(droppedItem);
         expect(customStore.getState().workspace.cards["100"]).toBeDefined();
         await userEvent.dragAndDrop(droppedElem, trash);

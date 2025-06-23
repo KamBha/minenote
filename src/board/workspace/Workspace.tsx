@@ -10,7 +10,7 @@ import CardContainer from "../cards/CardContainer";
 import retrieveCardTypeDetails from "../cards/cardRegistry";
 import { PREVIEW_OFFSET_X, PREVIEW_OFFSET_Y } from "../../constants";
 import { createCard } from "../cards/cardFactory"; 
-import type { DropTargetRecord, ElementDragPayload } from "@atlaskit/pragmatic-drag-and-drop/dist/types/internal-types";
+import type { DropTargetRecord } from "@atlaskit/pragmatic-drag-and-drop/dist/types/internal-types";
 import type { CardType, ColumnContent, HasChildrenIds, ID } from "../../shared/workspaceTypes";
 import { CardStatus, type DragCardData, type Edge } from "../../global";
 
@@ -95,7 +95,7 @@ const Workspace = () => {
             },
             onDrop: ({ location, source }) => {
                 const { dropTargets } = location.current;
-                const containerDropTarget = findFirstContainer(dropTargets, source.data );
+                const containerDropTarget = findFirstContainer(dropTargets, source.data as DragCardData );
                 const elementDropLocation = location.current.input;
                 const { left, top } = workspaceElement.getBoundingClientRect();
                 const { clientX, clientY } = elementDropLocation;

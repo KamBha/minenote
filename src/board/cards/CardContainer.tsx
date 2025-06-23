@@ -1,5 +1,4 @@
-
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { CardStatus } from "../../global";
 import { type CardBase, type DragCardData } from "../../global";
 import type { CardData } from "../../shared/workspaceTypes";
@@ -7,22 +6,27 @@ import invariant from "tiny-invariant";
 import { combine } from '@atlaskit/pragmatic-drag-and-drop/combine';
 import { draggable, dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import debounce from "../../utils/debounce";
-import { useAppDispatch } from "../workspace/workspaceStore";
-import { resizeCard } from "../workspace/workspaceSlice";
+import { useAppDispatch, useAppSelector } from "../workspace/workspaceStore";
+import { resizeCard, updateSelection } from "../workspace/workspaceSlice";
 import retrieveCardTypeDetails from "./cardRegistry";
 import { attachClosestEdge, extractClosestEdge } from '@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge';
+import classNames from "classnames";
+import "./CardContainer.css";
 
 interface CardContainerProps {
     Component: React.FC<CardBase>;
     preview?: boolean;
     cardData: CardData;
+    selected?: boolean;
 }
 
 const CardContainer: React.FC<CardContainerProps> = ({ Component, preview = false, cardData }) => {
+    const { selection } = useAppSelector((state) => state.workspace);
     const cardContainerRef = useRef<HTMLDivElement>(null);
     const dispatch = useAppDispatch();
     const [isDragging, setIsDragging] = useState(false);
     const { allowHeightSet } = retrieveCardTypeDetails(cardData.type);
+    const selected = cardData.id === selection?.id;
     const style: React.CSSProperties = {
         zIndex: cardData.zIndex
     };
@@ -37,6 +41,13 @@ const CardContainer: React.FC<CardContainerProps> = ({ Component, preview = fals
         if (allowHeightSet)
             style.height = cardData.height;
     }
+
+    const onClick = useCallback((event: React.MouseEvent<HTMLElement>) => {
+        console.log(event);
+        console.log(cardData.id)
+        dispatch(updateSelection({ id: cardData.id }));
+        event.stopPropagation();
+    }, [cardData]);
 
     useEffect(() => {
         const itemElement = cardContainerRef.current;
@@ -115,10 +126,21 @@ const CardContainer: React.FC<CardContainerProps> = ({ Component, preview = fals
         );
     });
     return (
-        <div className={`base-card ${cardData.parent ? "has-parent" : "" } ${preview ? " preview" : ""} ${cardData.type} ${isDragging ? " dragging" : ""} ${cardData.parent ? " is-child" : ""}`} 
-            style={style} 
-            ref={cardContainerRef} 
-            data-testid={`card-${cardData.id}`}>
+        <div
+            className={classNames(
+                "card-container",
+                { "has-parent": cardData.parent },
+                { preview },
+                cardData.type,
+                { dragging: isDragging },
+                { "is-child": cardData.parent },
+                { selected }
+            )}
+            style={style}
+            ref={cardContainerRef}
+            onClick={onClick}
+            data-testid={`card-${cardData.id}`}
+        >
             <Component preview={preview} cardData={cardData} />
         </div>
     );
