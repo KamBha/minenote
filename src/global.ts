@@ -22,4 +22,6 @@ export type DragCardData = Partial<CardData> & {
 export interface CardBase {
     preview: boolean;
     cardData: CardData;
+    onFocus: () => void;
+    onBlur: () => void;
 };

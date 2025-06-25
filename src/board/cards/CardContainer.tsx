@@ -43,11 +43,26 @@ const CardContainer: React.FC<CardContainerProps> = ({ Component, preview = fals
     }
 
     const onClick = useCallback((event: React.MouseEvent<HTMLElement>) => {
-        console.log(event);
-        console.log(cardData.id)
         dispatch(updateSelection({ id: cardData.id }));
         event.stopPropagation();
     }, [cardData]);
+
+    // Thanks to this bug in Firefox:- 
+    // https://bugzilla.mozilla.org/show_bug.cgi?id=739071 a bug that has not been fixed for
+    // over 13 years. <sigh>
+    const onFocus = useCallback(() => {
+        console.log("onFocus");
+        const itemElement = cardContainerRef.current;
+        invariant(itemElement, "Item element is not defined");
+        itemElement.removeAttribute("draggable");
+    }, [cardContainerRef?.current]);
+
+    const onBlur = useCallback(() => {
+        console.log("onBlur");
+        const itemElement = cardContainerRef.current;
+        invariant(itemElement, "Item element is not defined");
+        itemElement.setAttribute("draggable", "true");
+    }, [cardContainerRef?.current]);
 
     useEffect(() => {
         const itemElement = cardContainerRef.current;
@@ -120,11 +135,10 @@ const CardContainer: React.FC<CardContainerProps> = ({ Component, preview = fals
                         element, 
                         allowedEdges: ['top', 'bottom']
                     });
-                },
-                getIsSticky: () => true
+                }
             })
         );
-    });
+    }, [cardContainerRef.current]);
     return (
         <div
             className={classNames(
@@ -141,7 +155,7 @@ const CardContainer: React.FC<CardContainerProps> = ({ Component, preview = fals
             onClick={onClick}
             data-testid={`card-${cardData.id}`}
         >
-            <Component preview={preview} cardData={cardData} />
+            <Component preview={preview} cardData={cardData} onFocus={onFocus} onBlur={onBlur} />
         </div>
     );
 };

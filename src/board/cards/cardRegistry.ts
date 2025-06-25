@@ -28,6 +28,7 @@ const noteCreate = (commonData: CardData) => {
 
 const columnCreate = (commonData: CardData) => {
     const note = noteCreate({ ...commonData, id: createId(), parent: commonData.id, type: "note" })[0];
+    // We let the reducer handle filling out the children
     return [ note, { ...commonData, content: { title: "New Column", children: [] } } ];
 };
 

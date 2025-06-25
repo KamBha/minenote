@@ -157,11 +157,16 @@ main {
   line-height: 0.5rem;
 }
 
-/* CardContainer styles moved to CardContainer.css */
-
 .column {
   resize: horizontal;
   min-width: 320px;
+}
+
+.column { 
+-moz-user-select: text;
+-khtml-user-select: text;
+-webkit-user-select: text;
+-o-user-select: text;
 }
 
 .child-cards {

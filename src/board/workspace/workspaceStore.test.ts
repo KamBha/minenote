@@ -2,7 +2,6 @@ import { describe, it, expect, beforeEach, vi } from "vitest";
 import { setupStore } from "./workspaceStore";
 import { addCards, moveCard, deleteCard, resizeCard, updateSelection, updateSelectionExtraData } from "./workspaceSlice";
 import { SelectionLevel, type AddNewCards, type HasChildrenIds, type MoveCard } from "../../shared/workspaceTypes";
-import Workspace from "./Workspace";
 
 describe("workspaceStore", () => {
     let store: ReturnType<typeof setupStore>;

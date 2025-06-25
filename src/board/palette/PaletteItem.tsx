@@ -8,19 +8,20 @@ import CardContainer from "../cards/CardContainer";
 import store, { useAppSelector } from "../workspace/workspaceStore";
 import { PREVIEW_OFFSET_X, PREVIEW_OFFSET_Y } from "../../constants";
 import { CardStatus, type CardBase, type DragCardData } from "../../global";
-import { type CardType } from "../../shared/workspaceTypes";
+import { type CardData, type CardType } from "../../shared/workspaceTypes";
 
 
 interface PaletteItemProps {
     Icon: React.FC<React.SVGProps<SVGSVGElement>>;
     Component: React.FC<CardBase>;
+    previewData: CardData;
     label: string;
     type: CardType;
     defaultHeight: number;
     defaultWidth: number;
 }
 
-const PaletteItem: React.FC<PaletteItemProps> = ({ Icon, Component, label, type, defaultHeight:height, defaultWidth:width }) => {
+const PaletteItem: React.FC<PaletteItemProps> = ({ Icon, Component, label, type, defaultHeight:height, defaultWidth:width, previewData }) => {
     const itemRef = useRef<HTMLDivElement>(null);
     const [isDragging, setIsDragging] = useState(false);
     const zIndex = useAppSelector((state) => {
@@ -49,7 +50,11 @@ const PaletteItem: React.FC<PaletteItemProps> = ({ Icon, Component, label, type,
                     getOffset: () => ({ x: PREVIEW_OFFSET_X, y: PREVIEW_OFFSET_Y }),
                     render({ container }) {
                         const root = createRoot(container);
-                        root.render(<Provider store={store}><CardContainer preview={true} Component={Component} cardData={{id: "foo", type: "note", height, width, zIndex }}></CardContainer></Provider>);
+                        root.render(
+                            <Provider store={store}>
+                                <CardContainer preview={true} Component={Component} cardData={previewData}></CardContainer>
+                            </Provider>);
+
                         return () => {
                             root.unmount();
                         };
