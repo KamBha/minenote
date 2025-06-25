@@ -8,7 +8,7 @@ import { useAppSelector } from "../../../workspace/workspaceStore";
 import retrieveCardTypeDetails from "../../cardRegistry";
 import CardContainer from "../../CardContainer";
 import ContentEditable,  { type ContentEditableEvent } from "../../../../utils/ContentEditable";
-// import ContentEditable, { type ContentEditableEvent } from "react-contenteditable";
+import "./Column.css";
 
 interface ColumnProps extends CardBase {
     content?: ColumnContent
@@ -101,7 +101,6 @@ const Column = ({ preview, cardData, onFocus, onBlur }: ColumnProps) => {
             </div>
         );
     }
-console.log("headingEditable", headingEditable);
     return (
         <div className={`column-card ${preview ? " preview" : ""}  ${isDraggedOver ? "dragged-over" : ""}`} ref={columnRef} onClick={onCardClicked}>
             <ContentEditable html={heading} 

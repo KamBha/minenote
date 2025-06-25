@@ -5,6 +5,7 @@ import { useAppDispatch } from "../workspace/workspaceStore";
 import invariant from "tiny-invariant";
 import { deleteCard } from "../workspace/workspaceSlice";
 import { CardStatus } from "../../global";
+import "./TrashContainer.css";
 
 const TrashContainer = () => {
     const trashRef = useRef<HTMLDivElement>(null);

@@ -1,0 +1,22 @@
+.trash {
+  margin-top: auto;
+  max-width: fit-content;
+  margin-inline: auto;
+  margin-bottom: 1rem;
+}
+
+.trash svg {
+  fill: var(--clr-surface-a20);
+  height: 2.7rem;
+  width: 2.7rem;
+  margin-bottom: 0;
+}
+
+.trash p {
+  text-align: center;
+  max-width: fit-content;
+  margin-inline: auto;
+  font-size: x-small;
+  width: 100%;
+  line-height: 0.5rem;
+}

@@ -1,0 +1,29 @@
+.column {
+    resize: horizontal;
+    min-width: 320px;
+    user-select: text;
+}
+
+.child-cards {
+    width: 100%;
+    position: static;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    height: auto;
+    min-height: min-content;
+}
+
+.is-child {
+    resize: none;
+    overflow-y: auto;
+}
+
+.column .child-cards .card-container {
+    width: 100%;
+    height: 100%;
+}
+
+.column h2 {
+    outline: none;
+}

@@ -1,3 +1,4 @@
+import "./Palette.css";
 import PaletteItem from "./PaletteItem";
 import TrashContainer from "./TrashContainer";
 import retrieveCardTypeDetails from "../cards/cardRegistry";
@@ -8,7 +9,7 @@ const Palette = () => {
     
     return (
         <div className="palette">
-            <div className="paletteItems">
+            <div className="palette-items">
                 {PALETTE_ORDER.map((paletteItem) => {
                     const { icon, label, defaultHeight, defaultWidth, widget, create } = retrieveCardTypeDetails(paletteItem)
                     const previewItems = create({ type: paletteItem, id: "", width: defaultWidth, height: defaultHeight});

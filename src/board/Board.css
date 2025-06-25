@@ -25,6 +25,8 @@ body {
   --clr-surface-a50: #979696;
 
   --palette-width: 4rem;
+
+  --app-header-height: 10rem;
 }
 
 #root {
@@ -37,6 +39,7 @@ main {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
+  height: 100vh;
 }
 
 [draggable="true"] {
@@ -62,7 +65,7 @@ main {
   background-color: var(--clr-surface-a20);
   border-bottom: 0.1rem solid var(--clr-surface-a0);
   padding: 1.1rem;
-  height: 12rem;
+  height: calc(--app-header-height);
   width: 100%;
   position: sticky;
   top:0;
@@ -71,120 +74,3 @@ main {
   text-align: center;
 }
 
-.palette {
-  background-color: var(--clr-surface-a0);
-  border-right: 0.01rem solid var(--clr-surface-a50);
-  width: var(--palette-width);
-  height: 79.6vh;
-  display:flex;
-  align-items: center;
-  flex-direction: column;
-  justify-content: space-between;
-  flex-wrap: nowrap;
-  padding-top: 1rem;
-  flex-grow: 1;
-
-}
-
-.palette-item {
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 1rem;
-  height: fit-content;
-  line-height: 1rem;
-  width:2.1rem;
-}
-
-.palette-item-content {
-  transition: transform 140ms ease-out;
-}
-
-.palette-item-content:hover {
-  transform: translateX(0.3rem);
-}
-
-.palette-item-content div {
-  background-color: var(--clr-surface-a20);
-  max-width: fit-content;
-  margin-inline: auto;
-}
-
-.palette-item-content.note-palette-item svg {
-  margin-left: 0.2rem;
-  margin-right: 0.2rem;
-  margin-top: 0.1rem;
-
-  fill: var(--clr-light-a0);
-  height: 1.2rem;
-  width: 1.4rem;
-}
-
-
-.palette-item-content.column-palette-item svg {
-  margin-left: 0.2rem;
-  margin-right: 0.2rem;
-  margin-top: 0.3rem;
-
-  height: 1.2rem;
-  width: 1.4rem;
-}
-
-.trash {
-  max-width: fit-content;
-  margin-inline: auto;
-  margin-bottom: 2rem
-}
-
-.trash svg {
-  fill: var(--clr-surface-a20);
-  height: 2.7rem;
-  width: 2.7rem;
-  margin-bottom: 0;
-  flex-grow: 1;
-}
-
-.palette-item-content p {
-  text-align: center;
-  font-size: x-small;
-}
-
-.trash p {
-  text-align: center;
-  max-width: fit-content;
-  margin-inline: auto;
-  font-size: x-small;
-  width: 100%;
-  line-height: 0.5rem;
-}
-
-.column {
-  resize: horizontal;
-  min-width: 320px;
-}
-
-.column { 
--moz-user-select: text;
--khtml-user-select: text;
--webkit-user-select: text;
--o-user-select: text;
-}
-
-.child-cards {
-  width: 100%;
-  position: static;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  height: auto;
-  min-height: min-content;
-}
-
-.is-child { 
-  resize: none;
-  overflow-y: auto;
-}
-
-.column .child-cards .card-container {
-  width: 100%;
-  height: 100%;
-}
