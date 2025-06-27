@@ -2,10 +2,10 @@ import { render } from "vitest-browser-react";
 import { Provider } from "react-redux";
 import Board from "../../../Board";
 import { setupStore } from "../../../workspace/workspaceStore";
-import { describe, it, expect, beforeEach } from "vitest";
+import { describe, it, expect, beforeEach, vi } from "vitest";
 import { page, userEvent, type Locator } from '@vitest/browser/context';
-import type { HasChildrenIds, ID } from "../../../../shared/workspaceTypes";
-
+import type { ColumnContent, HasChildrenIds, ID } from "../../../../shared/workspaceTypes";
+import { commands } from '@vitest/browser/context'
 
 describe("Column", () => {
     beforeEach(() => {
@@ -430,7 +430,7 @@ describe("Column", () => {
             const column = workspace.getByTestId("card-column");
             const columnToMoveTo = workspace.getByTestId("card-columnToMoveTo");
 
-            await userEvent.dragAndDrop(column, columnToMoveTo, { sourcePosition: { x: 0, y:0 }, targetPosition: { x: 0, y:0 } });
+            await userEvent.dragAndDrop(column, columnToMoveTo, { sourcePosition: { x: 0, y: 0 }, targetPosition: { x: 0, y: 0 } });
             const childrenOfColumnAfterChange =
                 (customStore.getState().workspace.cards["columnToMoveTo"].content as HasChildrenIds).children;
             expect(childrenOfColumnAfterChange).not.toContain("column");
@@ -604,4 +604,140 @@ describe("Column", () => {
             });
         });
     });
-});
+    describe("heading behaviour", () => {
+        let customStore: ReturnType<typeof setupStore>;
+        beforeEach(() => {
+            customStore = setupStore({
+                workspace: {
+                    id: "foo",
+                    description: "",
+                    cards: {
+                        "100": {
+                            id: "100",
+                            top: 10,
+                            left: 10,
+                            zIndex: 1,
+                            content: null,
+                            type: "note",
+                            width: 30,
+                            height: 40,
+                            parent: "column"
+                        },
+                         "200": {
+                                id: "200",
+                                top: 200,
+                                left: 200,
+                                zIndex: 1,
+                                content: null,
+                                type: "note",
+                                width: 200,
+                                height: 300
+                            },
+                        "column": {
+                            id: "column",
+                            top: 10,
+                            left: 10,
+                            zIndex: 1,
+                            content: {
+                                title: "heading",
+                                children: ["100"]
+                            },
+                            type: "column",
+                            width: 30,
+                            height: 40,
+                        }
+                    },
+                    currentMaxZIndex: 1
+                }
+            });
+        })
+        it("should not have heading as content editable when not selected", async () => {
+            render(
+                <Provider store={customStore}>
+                    <Board />
+                </Provider>
+            );
+
+            const workspace = page.getByTestId("workspace");
+            const column = workspace.getByTestId("card-column");
+            expect(column.getByRole("heading").element().getAttribute("contenteditable")).toBe("false");
+        });
+
+        it("should have heading as content editable when not selected", async () => {
+            render(
+                <Provider store={customStore}>
+                    <div className="app">
+                        <Board />
+                    </div>
+                </Provider>
+            );
+
+            const workspace = page.getByTestId("workspace");
+            const column = workspace.getByTestId("card-column");
+            const heading = column.getByRole("heading");
+            await column.click({ position: { x: 10, y: 10 } });
+            await heading.click({ position: { x: 10, y: 10 } });
+            expect(heading.element().getAttribute("contenteditable")).toBe("true");
+        });
+
+        it("should disable dragging when heading clicked", async () => {
+            render(
+                <Provider store={customStore}>
+                    <div className="app">
+                        <Board />
+                    </div>
+                </Provider>
+            );
+
+            const workspace = page.getByTestId("workspace");
+            const column = workspace.getByTestId("card-column");
+            const heading = column.getByRole("heading");
+            await column.click({ position: { x: 10, y: 10 } });
+            await heading.click({ position: { x: 10, y: 10 } });
+            expect(column.element().hasAttribute("draggable")).toBe(false);
+        });
+
+        it("should reenable dragging when heading blurred", async () => {
+            render(
+                <Provider store={customStore}>
+                    <div className="app">
+                        <Board />
+                    </div>
+                </Provider>
+            );
+
+            const workspace = page.getByTestId("workspace");
+            let column = workspace.getByTestId("card-column");
+            const otherNote = workspace.getByTestId("card-200");
+            const heading = column.getByRole("heading");
+            await column.click({ position: { x: 10, y: 10 } });
+            await heading.click({ position: { x: 10, y: 10 } });
+            expect(column.element().hasAttribute("draggable")).toBe(false);
+            await otherNote.click({ position: { x: 10, y: 10 } });
+            column = workspace.getByTestId("card-column");
+            expect(column.element().getAttribute("draggable")).toBe("true");
+        });
+
+        it("should update heading when editing", async () => {
+            render(
+                <Provider store={customStore}>
+                    <div className="app">
+                        <Board />
+                    </div>
+                </Provider>
+            );
+
+            const workspace = page.getByTestId("workspace");
+            let column = workspace.getByTestId("card-column");
+            const heading = column.getByRole("heading");
+            await column.click({ position: { x: 10, y: 10 } });
+            await heading.click({ position: { x: 10, y: 10 } });
+            await userEvent.type(heading, "new heading");
+            await new Promise((resolve) => { setTimeout(() => resolve(null), 250) });
+            const store = customStore.getState(); 
+            expect(heading).toHaveFocus();
+            
+            expect((store.workspace.cards["column"].content as ColumnContent).title).toBe("new heading");
+        });
+    });
+}); 

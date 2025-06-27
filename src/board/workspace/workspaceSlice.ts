@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { type WorkspaceData, type AddNewCards, type MoveCard, type DeleteCard, type ResizeCard, type HasId, type HasChildrenIds, type UpdateSelection, SelectionLevel, type ID } from "../../shared/workspaceTypes"
+import { type WorkspaceData, type AddNewCards, type MoveCard, type DeleteCard, type ResizeCard, type HasId, type HasChildrenIds, type UpdateSelection, SelectionLevel, type ID, type UpdateContent, UpdateContentType } from "../../shared/workspaceTypes"
 import retrieveCardTypeDetails from "../cards/cardRegistry";
 
 const initialState: WorkspaceData = {
@@ -112,10 +112,32 @@ export const workspaceSlice = createSlice({
             if (state.selection && action.payload.extraSelectionData) {
                 state.selection.extraSelectionData = action.payload.extraSelectionData;
             }
+        },
+        updateContent(state, action: PayloadAction<UpdateContent>) {
+            if (!action.payload) {
+                return;
+            }
+
+            const { payload } = action;
+            const currentCardStateContent = state.cards[payload.id].content;
+            state.cards[payload.id].content = 
+                    payload.updateType === UpdateContentType.REPLACE_DATA ? payload.content 
+                                                                          : { 
+                                                                              ...currentCardStateContent, 
+                                                                              ...payload.content
+                                                                            }
         }
     },
 });
 
 export const workspaceReducer = workspaceSlice.reducer;
 
-export const { addCards, moveCard, deleteCard, resizeCard, updateSelection, updateSelectionExtraData } = workspaceSlice.actions;;
+export const { 
+    addCards, 
+    moveCard, 
+    deleteCard, 
+    resizeCard, 
+    updateSelection, 
+    updateSelectionExtraData, 
+    updateContent 
+} = workspaceSlice.actions;; 

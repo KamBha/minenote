@@ -4,6 +4,13 @@ export const SelectionLevel = {
     EDITED: "EDITING"
 } as const;
 export type SelectionLevel = typeof SelectionLevel[keyof typeof SelectionLevel];
+
+export const UpdateContentType = {
+    UPDATE_FIELDS: "UPDATE_FIELDS",
+    REPLACE_DATA: "REPLACE_DATA"
+} as const;
+export type UpdateContentType = typeof UpdateContentType[keyof typeof UpdateContentType];
+
 export type ID = string;
 
 export type BaseCardData =  {
@@ -59,6 +66,11 @@ export type ResizeCard = HasId & {
 export type UpdateSelection = HasId & {
     extraSelectionData?: any;
 } | null | undefined;
+
+export type UpdateContent = HasId & {
+    content: any;
+    updateType: UpdateContentType;
+}
 
 export type HasChildrenIds = {
     children: Array<ID>

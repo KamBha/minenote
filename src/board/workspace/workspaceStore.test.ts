@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { setupStore } from "./workspaceStore";
-import { addCards, moveCard, deleteCard, resizeCard, updateSelection, updateSelectionExtraData } from "./workspaceSlice";
-import { SelectionLevel, type AddNewCards, type HasChildrenIds, type MoveCard } from "../../shared/workspaceTypes";
+import { addCards, moveCard, deleteCard, resizeCard, updateSelection, updateSelectionExtraData, updateContent } from "./workspaceSlice";
+import { SelectionLevel, UpdateContentType, type AddNewCards, type ColumnContent, type HasChildrenIds, type MoveCard } from "../../shared/workspaceTypes";
 
 describe("workspaceStore", () => {
     let store: ReturnType<typeof setupStore>;
@@ -800,7 +800,7 @@ describe("workspaceStore", () => {
         });
     });
 
-    describe("updateSelectionExtraData reducer", () => {
+    describe("updateSelectionExtraData", () => {
         it("should update extraSelectionData if selection exists", () => {
             const store = setupStore();
             store.dispatch(addCards([{ id: "a", type: "note", width: 10, height: 10, left: 0, top: 0 }]));
@@ -828,6 +828,67 @@ describe("workspaceStore", () => {
             store.dispatch(updateSelectionExtraData(undefined));
             const state = store.getState();
             expect(state.workspace.selection?.extraSelectionData).toBeUndefined();
+        });
+    });
+
+    describe("updateContent", () => {
+        beforeEach(() => {
+            store = setupStore({
+                workspace: {
+                    id: "foo",
+                    description: "",
+                    cards: {
+                        "foo": {
+                            id: "foo",
+                            top: 0,
+                            left: 0,
+                            zIndex: 1,
+                            content: "old content",
+                            type: "note",
+                            width: 30,
+                            height: 40,
+                            parent: "column"
+                        },
+                        "column": {
+                            id: "column",
+                            top: 0,
+                            left: 0,
+                            zIndex: 1,
+                            content: {
+                                title: "heading",
+                                children: ["foo"]
+                            },
+                            type: "column",
+                            width: 30,
+                            height: 40,
+                        }
+                    },
+                    currentMaxZIndex: 1
+                }
+            });
+        })
+        it("should update existing state content when updateContentType is replace", () => {
+            store.dispatch(updateContent({ 
+                id: "column",
+                content: { title: "new heading" }, 
+                updateType: UpdateContentType.UPDATE_FIELDS
+            }));
+
+            const state = store.getState();
+
+            expect((state.workspace.cards["column"].content as ColumnContent).title).toBe("new heading");
+        });
+
+        it("should update existing state content when updateContentType is replace", () => {
+            store.dispatch(updateContent({ 
+                id: "foo",
+                content: "new content", 
+                updateType: UpdateContentType.REPLACE_DATA
+            }));
+
+            const state = store.getState();
+
+            expect(state.workspace.cards["foo"].content as string).toBe("new content");
         });
     });
 });

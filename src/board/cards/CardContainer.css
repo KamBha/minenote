@@ -22,4 +22,30 @@
     /* Add more selected styles if needed */
 }
 
+.is-child {
+    resize: none;
+    overflow-y: auto;
+}
+
+.column {
+    resize: horizontal;
+    min-width: 320px;
+    user-select: text;
+}
+
+.child-cards {
+    width: 100%;
+    position: static;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    height: auto;
+    min-height: min-content;
+}
+
+.column .child-cards .card-container {
+    width: 100%;
+    height: 100%;
+}
+
 

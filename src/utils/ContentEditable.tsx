@@ -77,8 +77,13 @@ export default class ContentEditable extends React.Component<Props> {
             return true;
         }
         // Handle additional properties
+        // NOTE: This is a modification to the original as it did not check if onFocus/onBlur 
+        // where modified
         return props.disabled !== nextProps.disabled ||
             props.tagName !== nextProps.tagName ||
+            props.onClick !== nextProps.onClick ||
+            props.onFocus !== nextProps.onFocus ||
+            props.onBlur != nextProps.onBlur ||
             props.className !== nextProps.className ||
             props.innerRef !== nextProps.innerRef ||
             props.placeholder !== nextProps.placeholder ||

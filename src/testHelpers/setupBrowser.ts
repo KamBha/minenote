@@ -1,1 +1,2 @@
 import "./customLocators";
+import "./customCommands";
